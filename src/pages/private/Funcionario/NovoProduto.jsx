@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import api from "../../../services/api";
 import MenuFuncionario from "./MenuFuncionario";
 import CredentialsUser from "../../../components/CredentialsUser";
+import { use } from "react";
+import { useEffect } from "react";
 
 
 const NovoProduto = () => {
@@ -9,13 +11,25 @@ const NovoProduto = () => {
   const [nome, setNome] = useState("");
   const [precoVenda, setPrecoVenda] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [categoriaId, setCategoriaId] = useState("");
+  const [categorias, setCategorias] = useState([]);
   const fileInputRef = useRef(null); // Utilizamos para controlar os elementos do DOM (HTML) ele traz uma referência para esses elementos
   
   const [image, setImage] = useState(null); // Agora armazenamos múltiplas imagens
   const [preview, setPreview] = useState(null); // Para armazenar as prévias das imagens selecionadas
   const [croppedPreview, setCroppedPreview] = useState(null);
 
-  
+ useEffect(() =>{
+    api
+       .get("/categoria")
+       .then((response)=>{
+          setCategorias(response.data.data)
+       }).catch((error)=>{
+          console.error(`Erro ao buscar a lista de categorias ${error}`);
+       })
+ },[]);
+
+
 const token = localStorage.getItem("token"); // Obtém o token salvo
 // Manipula a seleção de imagem e gera prévia
 const handleImageChange = (event) => {
@@ -58,12 +72,19 @@ const cropImage = (imageSrc) => {
     
         e.preventDefault(); // Cancela o reload da página
        
-        console.log("Produto:", { nome, precoVenda, descricao });
+           const formData = new FormData();
+        // formData.append("nome", nome);
+        // formData.append("precoVenda", precoVenda);
+        // formData.append("descricao", descricao); 
+        const produto = {
+          nome : nome,
+          precoVenda: parseFloat(precoVenda),
+          descricao: descricao,
+          categoria: {
+            id: Number(categoriaId)
+          }
+        }
 
-        const formData = new FormData();
-        formData.append("nome", nome);
-        formData.append("precoVenda", precoVenda);
-        formData.append("descricao", descricao);
 
         if (croppedPreview !== null) {
           const response = await fetch(croppedPreview);
@@ -74,13 +95,12 @@ const cropImage = (imageSrc) => {
         try {
           const response = await api.post(
             "/produto",
-            formData,
+             produto,
              {
               headers:{
                 "Content-Type": "application/json"
               }
              }
-
           );
          console.log("Produto cadastrado " + response.data);
          alert(response.data.data.nome + " cadastrada sucesso");
@@ -93,6 +113,10 @@ const cropImage = (imageSrc) => {
            console.error("Não foi possível salvar o produto ", error)
         }
    };
+
+   const handleChange = (e) => {
+       setCategoriaId(e.target.value);
+   }
 
   return (
     <div>
@@ -131,6 +155,23 @@ const cropImage = (imageSrc) => {
             rows="3"
             required
           ></textarea>
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Escolha a Categoria:</label>
+          <select
+          value={categoriaId}
+          onChange={handleChange}
+          className="border p-2 w-full rounded"
+          required
+          >
+          <option value="">Selecione uma categoria</option>
+          {categorias.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+                 {cat.nome}
+            </option>
+          ))}
+          </select>
         </div>
 
         <div className="mb-3">

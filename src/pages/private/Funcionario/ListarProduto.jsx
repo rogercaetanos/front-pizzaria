@@ -29,6 +29,8 @@ const ListarProduto = () => {
 
    },[]);
 
+  
+
 
    // `  ` => (Crase invertida)"Literal String" Forma de concatenar textos com variáveis de maneira mais natural 
    //          a variável deve estar entre ${}             
@@ -53,6 +55,7 @@ const ListarProduto = () => {
     location.href = location.href; // Redireciona para a mesma página
    }
 
+ 
 /*
    const arrayProdutos = [
       {
@@ -88,6 +91,7 @@ const ListarProduto = () => {
               <th>Nome</th>
               <th>Preço</th>
               <th>Descrição</th>
+              <th>Categoria</th>
               <th>Ações</th> {/* Nova coluna de Ações */}
             </tr>
           </thead>
@@ -104,6 +108,7 @@ const ListarProduto = () => {
                   </td>
                   
                 <td style={{ fontSize: "13px" }}>{produto.descricao}</td>
+                <td style={{ fontSize: "13px" }}>{ produto.categoria != null ? produto.categoria.nome : ""}</td>
                 <td className="text-center fs-6" style={{ width: "100px" }}>
                   {/* Botão de Editar */}
                   <button
