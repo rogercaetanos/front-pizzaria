@@ -6,6 +6,7 @@ import HomeFuncionario from "./pages/private/Funcionario/HomeFuncionario";
 import ListarProduto from "./pages/private/Funcionario/ListarProduto";
 import NovoProduto from "./pages/private/Funcionario/NovoProduto";
 import EditarProduto from "./pages/private/Funcionario/EditarProduto";
+import ListarCategoria from "./pages/private/Funcionario/ListarCategoria";
 
 function App() {
   return (
@@ -35,7 +36,14 @@ function App() {
               <Route path="/pizzaria/funcionario/produto/editar/:id"  
                 element={<EditarProduto />}
                />
-               
+               {  /*Rotas Categoria */}
+
+               <Route
+              path="/pizzaria/funcionario/categoria"
+              element={<ListarCategoria/>}
+              />
+
+
             </Routes>
          </Router>
       </div>
