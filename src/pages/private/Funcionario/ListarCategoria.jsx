@@ -66,6 +66,7 @@ const ListarCategoria = () => {
             <tr>
               <th>Nome</th>
               <th>Descrição</th>
+              <th>Status</th>
               <th>Ações</th> {/* Nova coluna de Ações */}
             </tr>
           </thead>
@@ -76,6 +77,17 @@ const ListarCategoria = () => {
                
                   
                 <td style={{ fontSize: "13px" }}>{categoria.descricao}</td>
+
+               
+                <td style={{ fontSize: "13px" }}>
+                  <span 
+                  style={{
+                    color: categoria.codStatus === true ? "blue" : "red"}}
+                  >
+                     { categoria.codStatus === true ? "Ativo" : "Inativo"}
+                  </span>
+                </td>
+
                 
                 <td className="text-center fs-6" style={{ width: "100px" }}>
                   {/* Botão de Editar */}

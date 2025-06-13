@@ -11,8 +11,7 @@ function EditarCategoria() {
   const [categoria, setCategoria] = useState(
      {
       nome: "",
-      descricao: "",
-      precoVenda: 0 
+      descricao: ""
     }
   );
 
@@ -55,11 +54,17 @@ function EditarCategoria() {
 
   const handleChange = (e) => {
     // Recupera o valor atual do produto e substitui pelo novo valor digitado no campo do formulário
-    setCategoria({ ...categoria, [e.target.name] : e.target.value});
+    //setCategoria({ ...categoria, [e.target.name] : e.target.value});
+
+    const { name, value } = e.target;
+    const parsedValue = name === "codStatus" ? value === "true" : value;
+
+    setCategoria((categoria) => ({
+      ...categoria,
+      [name] : parsedValue,
+    }));
     
-  }
-
-
+  };
 
 
   return (
@@ -92,6 +97,32 @@ function EditarCategoria() {
             onChange={handleChange}
             required
           ></textarea>
+        </div>
+
+        <div className="mb-3">
+          <label>
+          <input
+            type="radio"
+            name="codStatus"
+            value="true"
+            checked={categoria.codStatus === true}
+            onChange={handleChange}
+           />
+           Ativo
+       </label>
+       <br />
+       <label>
+          <input
+            type="radio"
+            name="codStatus"
+            value="false"
+            checked={categoria.codStatus === false}
+            onChange={handleChange}
+           />
+           Inativo
+       </label>
+
+
         </div>
 
         {/* Upload de Imagem */}

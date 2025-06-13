@@ -166,7 +166,9 @@ const cropImage = (imageSrc) => {
           required
           >
           <option value="">Selecione uma categoria</option>
-          {categorias.map((cat) => (
+          {categorias
+          .filter((cat) => cat.codStatus === true)
+          .map((cat) => (
             <option key={cat.id} value={cat.id}>
                  {cat.nome}
             </option>
