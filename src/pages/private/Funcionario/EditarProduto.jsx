@@ -16,6 +16,11 @@ function EditarProduto() {
     }
   );
 
+ const[categoriaId, setCategoriaId] = useState("");
+ const [categorias, setCategorias] = useState([]);
+
+
+
   const {id} = useParams();
   const navigate = useNavigate();
   
@@ -23,10 +28,26 @@ function EditarProduto() {
       api
       .get(`/produto/${id}`)
       .then((response) => {
-         setProduto(response.data.data);
+        const dados = response.data.data;
+         setProduto(dados);
+         if(dados?.categoria?.id) {
+          setCategoriaId(dados.categoria.id);
+         }
+
       }).catch((error)=>{
         console.error(`Erro ao buscar o produto selecionado. ${error}`)
       })
+      
+      api
+      .get(`/categoria`)
+      .then((response) => {
+         setCategorias(response.data.data);
+      }).catch((error)=>{
+        console.error(`Erro ao buscar o produto selecionado. ${error}`)
+      })
+
+
+
 
   },[]);
  
@@ -45,13 +66,31 @@ function EditarProduto() {
 
   }
 
-  
-
   const handleChange = (e) => {
     // Recupera o valor atual do produto e substitui pelo novo valor digitado no campo do formulário
-    setProduto({ ...produto, [e.target.name] : e.target.value});
+    // setProduto({ ...produto, [e.target.name] : e.target.value});  // funciona sem o codStatus
+
+    
+    const { name, value } = e.target;
+    const parsedValue = name === "codStatus" ? value === "true" : value;
+
+    setProduto((produto)=> ({
+      ...produto,
+      [name] : parsedValue,
+    }))
+    
   }
 
+  const handleChangeCategoria = (e) => {
+   const novoId = e.target.value;
+   setCategoriaId(novoId);
+
+   setProduto((prev) => ({
+     ...prev,
+     categoria: { ...prev.categoria, id: novoId},
+   }))
+    
+  }
 
 
   return (
@@ -98,6 +137,54 @@ function EditarProduto() {
             required
           ></textarea>
         </div>
+
+        <div className="mb-3">
+          <label className="form-label">Escolha a Categoria:</label>
+          <select
+          value={categoriaId}
+          onChange={handleChangeCategoria}
+          className="border p-2 w-full rounded"
+          required
+          >
+          <option value="">Selecione uma categoria</option>
+          {categorias.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+                 {cat.nome}
+            </option>
+          ))}
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <h6>Ativar ou Desativar Produto</h6>
+          <label>
+                <input 
+                type="radio"
+                name="codStatus"
+                value= "true"
+                checked={produto.codStatus === true} 
+                onChange={handleChange}
+                />
+            Ativo
+          </label>
+          <br />
+
+          <label>
+                <input 
+                type="radio"
+                name="codStatus"
+                value= "false"
+                checked={produto.codStatus === false} 
+                onChange={handleChange}
+                />
+             Inativo
+          </label>
+         
+        </div>
+
+
+
+
 
         {/* Upload de Imagem */}
         <div className="mb-3">

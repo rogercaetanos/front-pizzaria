@@ -92,6 +92,7 @@ const ListarProduto = () => {
               <th>Preço</th>
               <th>Descrição</th>
               <th>Categoria</th>
+              <th>Status</th>
               <th>Ações</th> {/* Nova coluna de Ações */}
             </tr>
           </thead>
@@ -109,6 +110,18 @@ const ListarProduto = () => {
                   
                 <td style={{ fontSize: "13px" }}>{produto.descricao}</td>
                 <td style={{ fontSize: "13px" }}>{ produto.categoria != null ? produto.categoria.nome : ""}</td>
+                 
+
+                <td style={{ fontSize: "13px" }}>
+                  <span 
+                  style={{
+                    color: produto.codStatus === true ? "blue" : "red"}}
+                  >
+                   { produto.codStatus === true ? "Ativo" : "Inativo" }
+                  </span>
+                </td>
+
+
                 <td className="text-center fs-6" style={{ width: "100px" }}>
                   {/* Botão de Editar */}
                   <button

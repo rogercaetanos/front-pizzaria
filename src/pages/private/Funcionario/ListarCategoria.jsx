@@ -30,14 +30,12 @@ const ListarCategoria = () => {
    },[]);
 
   
-
-
    // `  ` => (Crase invertida)"Literal String" Forma de concatenar textos com variáveis de maneira mais natural 
    //          a variável deve estar entre ${}             
 
    const openModal = (categoriaId) =>{
         console.log(`Categoria selecionada para exclusão ${categoriaId}`)
-        setProdutoSelecionado(categoriaId);
+        setCategoriaSelecionada(categoriaId);
         setIsModalOpen(true);
    }
 
